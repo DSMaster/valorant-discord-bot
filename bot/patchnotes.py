@@ -68,7 +68,7 @@ def fetch_latest_patchnotes():
         if link == load_last_patchnote_url():
             return None
         
-        description = "### " + pieces[1] + "\n" + pieces[3]
+        description = "### " + pieces[1] + "\n" + " ".join(pieces[3:])
         image_url = image_link
         
         save_last_patchnote_url(link)
