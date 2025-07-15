@@ -17,6 +17,10 @@ REDDIT_CLIENT_ID = os.getenv("REDDIT_CLIENT_ID")
 REDDIT_CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET")
 REDDIT_USER_AGENT = os.getenv("REDDIT_USER_AGENT")
 
+#include/exclude certain threads
+included = ["Americas", "Masters", "Champions"]
+excluded = ["EMEA", "Pacific", "China"]
+
 #initialize PRAW for use with Reddit API
 reddit = praw.Reddit(
     client_id=REDDIT_CLIENT_ID,
@@ -50,6 +54,19 @@ def fetch_latest_postmatches():
         construct.update({"result": construct['teams'].split(" vs ")[0] + lines[0].split(")")[1][:5] + construct['teams'].split(" vs ")[1]}) #teamname1 + score + teamname2
         construct.update({"vlr": lines[2].split("](")[1][:-1]}) #"[VLR](link)" so pulls "link)" and then takes just "link"
         construct.update({"maps": [m.replace("**", "") for m in lines[7:endingIndex] if m.strip()]}) #map results start on line 7 in the Reddit post
+
+        #only pass events that are in included and not in excluded
+        included_flag = False
+        excluded_flag = False
+        for i in (construct["event"].split(" ")):
+            if i in excluded:
+                excluded_flag = True
+                break
+            if i in included:
+                included_flag = True
+                continue
+        if (not included_flag or excluded_flag):
+            continue
 
         comment_summary = get_top_comments(submission)
         construct.update({"comments": comment_summary})
