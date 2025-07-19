@@ -96,7 +96,8 @@ def get_top_comments(submission, max_comments=3):
         #formatting: removes all links in the comment, including markdown ones (e.g. [Display](URL))
         #should and will swap to regex eventually
         start_index = body.find("https://")
-        if (body[start_index-1] == "("): start_index = start_index-1
+        if (start_index == 0): pass
+        elif (body[start_index-1] == "("): start_index = start_index-1
         while(start_index != -1):
             paren_index = body[start_index:].find(")") #link ends w/ paren
             space_index = body[start_index:].find(" ") #link ends w/ space
@@ -106,7 +107,8 @@ def get_top_comments(submission, max_comments=3):
             body = body[:start_index]+body[end_index+1:]
 
             start_index = body.find("https://")
-            if (body[start_index-1] == "("): start_index = start_index-1
+            if (start_index == 0 or start_index == -1): pass
+            elif (body[start_index-1] == "("): start_index = start_index-1
         
         #formatting: only allow 147 chars of the comment before cutoff
         if len(body) > 150:

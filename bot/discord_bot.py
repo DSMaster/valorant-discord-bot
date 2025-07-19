@@ -23,7 +23,7 @@ GUILD_ID = int(os.getenv("DISCORD_GUILD_ID"))
 CHANNEL_ID = int(os.getenv("MAIN_CHANNEL_ID"))
 
 #24hr format
-REDDIT_TIMES = [0, 4, 8, 12, 16, 20]
+REDDIT_TIMES = [0, 8, 12, 16, 20, 23]
 PATCH_TIME = [11, 16]
 
 last_reddit_check = None
