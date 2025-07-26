@@ -46,8 +46,10 @@ def fetch_latest_postmatches():
         
         construct = {}
         lines = submission.selftext.split("\n")
+        if "---" not in lines: #if a fake post with only a vlr link, skip
+            continue
         endingIndex = lines.index("---") #relevant data ends at the line that has "---"
-
+        
         construct.update({"url": submission.url})
         construct.update({"teams": submission.title.split(" / ")[0]})
         construct.update({"event": submission.title.split(" / ")[1]})

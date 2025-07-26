@@ -81,12 +81,15 @@ async def scheduled_check_loop():
             except Exception as e:
                 logger.exception(f"Error while fetching Reddit posts: {e}")
             last_reddit_check = now
-            if len(embeds) == 0:
-                logger.info("No new Reddit posts.")
-            else:
-                for e in embeds:
-                    await channel.send(embed=e)
-                logger.info(f"Sent Reddit posts to channel {channel.name}")
+            try:
+                if embeds is None or len(embeds) == 0:
+                    logger.info("No new Reddit posts.")
+                else:
+                    for e in embeds:
+                        await channel.send(embed=e)
+                    logger.info(f"Sent Reddit posts to channel {channel.name}")
+            except Exception as e:
+                logger.exception(f"Error while sending Reddit posts: {e}")
     
     if current_hour in PATCH_TIME:
         if not last_patch_check or last_patch_check.date() != now.date() or last_patch_check.hour != current_hour:
