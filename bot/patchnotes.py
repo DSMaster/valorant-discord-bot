@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import discord
 import json
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 LAST_PATCHNOTE_FILE = str(os.getenv("LAST_PATCHNOTE_FILE"))
@@ -64,13 +65,14 @@ def fetch_latest_patchnotes():
         pieces = matches[0].get_text(separator="\n").split("\n")
         title = pieces[2].strip()
         link = "https://playvalorant.com" + matches[0]['href']
+        dateObject = datetime.strptime(pieces[1], "%Y-%m-%dT%H:%M:%S.%fZ")
+        date = f"{dateObject.month}/{dateObject.day}/{dateObject.year}"
 
         if link == load_last_patchnote_url():
             return None
         
-        description = "### " + pieces[1] + "\n" + " ".join(pieces[3:])
+        description = "### " + date + "\n" + " ".join(pieces[3:])
         image_url = image_link
-        
         save_last_patchnote_url(link)
         return get_patchnote_embed(title, link, description, image_url)
     except:
